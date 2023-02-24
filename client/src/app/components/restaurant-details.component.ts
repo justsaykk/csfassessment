@@ -57,6 +57,6 @@ export class RestaurantDetailsComponent implements OnInit, OnDestroy {
   onSubmit() {
     let formData = this.commentForm.value
     let id = this.restaurant.restaurantId
-    this.svc.postComment()
+    // this.svc.postComment()
   }
 }

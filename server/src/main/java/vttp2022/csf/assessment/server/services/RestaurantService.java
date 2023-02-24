@@ -5,16 +5,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import vttp2022.csf.assessment.server.models.Comment;
-import vttp2022.csf.assessment.server.models.CustomMultipartFile;
 import vttp2022.csf.assessment.server.models.RestView2;
 import vttp2022.csf.assessment.server.models.Restaurant;
 // import vttp2022.csf.assessment.server.repositories.MapCache;
