@@ -1,0 +1,10 @@
+<div>
+    <h3>List of Cuisines</h3>
+    <table>
+        <tr *ngFor="let c of listOfCuisines">
+            <td>
+                <button (click)="onClick(c)">{{c}}</button>
+            </td>
+        </tr>
+    </table>
+</div>

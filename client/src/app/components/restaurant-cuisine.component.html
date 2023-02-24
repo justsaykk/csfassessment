@@ -1,0 +1,11 @@
+<div>
+    <h3>List of {{listOfRestaurants.cuisine}} Restaurants</h3>
+    <table>
+        <tr *ngFor="let r of listOfRestaurants.result">
+            <td>
+                <button (click)="onClick(r.id)">{{r.name}}</button>
+            </td>
+        </tr>
+    </table>
+    <button (click)="goBack()">Back</button>
+</div>
