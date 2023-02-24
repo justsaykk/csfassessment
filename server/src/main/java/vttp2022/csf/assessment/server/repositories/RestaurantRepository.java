@@ -106,7 +106,9 @@ public class RestaurantRepository {
 			restaurant.setAddress(r.getString("address"));
 			LatLng latlng = new LatLng();
 			List<Double> latlngArr = r.getList("coordinates", Double.class);
+
 			System.out.printf("Address: %s\n", restaurant.getAddress());
+			
 			latlng.setLatitude(latlngArr.get(0).floatValue());
 			latlng.setLongitude(latlngArr.get(1).floatValue());
 			restaurant.setCoordinates(latlng);

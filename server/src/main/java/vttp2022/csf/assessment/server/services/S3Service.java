@@ -31,8 +31,8 @@ public class S3Service {
 
         // Metadata of the file
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(file.getSize());
-        metadata.setContentType(file.getContentType());
+        metadata.setContentLength(file.getSize()); // long
+        metadata.setContentType(file.getContentType()); // string
         metadata.setUserMetadata(userData);
 
         String key = UUID.randomUUID().toString().substring(0, 8);

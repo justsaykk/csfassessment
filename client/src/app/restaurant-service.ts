@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom, map, Observable, take } from 'rxjs'
 import { Restaurant, Comment, CuisineList, RestaurantList, RestaurantView3 } from './models'
@@ -94,7 +94,16 @@ export class RestaurantService {
 	// TODO Task 5
 	// Use this method to submit a comment
 	// DO NOT CHANGE THE METHOD'S NAME OR SIGNATURE
-	// public postComment(comment: Comment): Promise<any> {
-	// 	// Implememntation in here
-	// }
+	public postComment(comment: Comment): Promise<any> {
+		let queryUrl = `${this.BASE_URL}/comments`
+		let headers = new HttpHeaders()
+		.set("Content-Type", "application/json")
+		.set("Accept", "appliction/json")
+
+		return firstValueFrom<any>(
+			this.http.post<any>(queryUrl, comment, {headers})
+		).then(
+			() => {console.log("Posted!")}
+		)
+	}
 }

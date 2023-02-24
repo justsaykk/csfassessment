@@ -10,14 +10,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import vttp2022.csf.assessment.server.models.Comment;
 import vttp2022.csf.assessment.server.models.RestView2;
 import vttp2022.csf.assessment.server.models.Restaurant;
+import vttp2022.csf.assessment.server.services.CommentService;
 import vttp2022.csf.assessment.server.services.RestaurantService;
 
 @RestController
@@ -27,6 +31,9 @@ public class ApiController {
 
     @Autowired
     private RestaurantService rSvc;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getCuisines() {
@@ -74,19 +81,40 @@ public class ApiController {
         Optional<Restaurant> restaurantOptional = rSvc.getRestaurant(restaurant_id);
         Restaurant restaurant = restaurantOptional.get();
 
-        // Get map
-        
-        
+        // Get Coordinates
+        Float lat = restaurant.getCoordinates().getLatitude();
+        Float lng = restaurant.getCoordinates().getLongitude();
+
+        // Get map from Api
+        // Maybe Later
+
+
         JsonObject restaurantObj = Json.createObjectBuilder()
-        .add("restaurant_id", restaurant.getRestaurantId())
         .add("name", restaurant.getName())
         .add("cuisine", restaurant.getCuisine())
         .add("address", restaurant.getAddress())
-        // .add("coordinates", restaurant.getCoordinates())
+        .add("mapUrl", restaurant.getMapURL())
         .build();
 
         System.out.println(restaurantObj.toString());
 
         return null;
     }
+
+    @PostMapping(path = "/comments")
+    public ResponseEntity<String> postComments(
+        @RequestBody Comment comment
+    ) {
+        if (commentService.saveComment(comment)) {
+            JsonObject response = Json.createObjectBuilder()
+            .add("message", "Comment posted")
+            .build();
+            return new ResponseEntity<String>(response.toString(), HttpStatus.OK);
+        } else {
+            JsonObject response = Json.createObjectBuilder()
+            .add("message", "Unsuccessful post")
+            .build();
+            return new ResponseEntity<String>(response.toString(), HttpStatus.BAD_REQUEST);
+        }
+   }
 }

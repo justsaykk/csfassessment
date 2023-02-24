@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import vttp2022.csf.assessment.server.models.Comment;
+import vttp2022.csf.assessment.server.models.CustomMultipartFile;
 import vttp2022.csf.assessment.server.models.RestView2;
 import vttp2022.csf.assessment.server.models.Restaurant;
 // import vttp2022.csf.assessment.server.repositories.MapCache;
@@ -49,7 +50,7 @@ public class RestaurantService {
 		.collect(Collectors.toList());
 	}
 	
-	// TODO Task 4
+	// Task 4
 	// Use this method to find a specific restaurant
 	// You can add any parameters (if any) 
 	// DO NOT CHNAGE THE METHOD'S NAME OR THE RETURN TYPE
@@ -57,13 +58,14 @@ public class RestaurantService {
 		return restaurantRepo.getRestaurant(restaurant_id);
 	}
 	
-	// TODO Task 5
+	// Task 5
 	// Use this method to insert a comment into the restaurant database
 	// DO NOT CHNAGE THE METHOD'S NAME OR THE RETURN TYPE
 	public void addComment(Comment comment) {
-		// Implmementation in here
+		
 		
 	}
+
 	//
 	// You may add other methods to this class
 	private String slashConverter(String toConvert) {
@@ -74,28 +76,28 @@ public class RestaurantService {
 		return toConvert.replace("_", "/");
 	}
 
-	public void getMapFromS3() {
+	// public void getMapFromS3() {
 
-	}
+	// }
 	
-	public void getMapFromApi(String lat, String lng) {
-		String baseUrl = "http://map.chuklee.com";
-		String url = UriComponentsBuilder.fromUriString(baseUrl)
-		.queryParam("lat", lat)
-		.queryParam("lng", lng)
-		.toUriString();
+	// public void getMapFromApi(String lat, String lng) {
+	// 	String baseUrl = "http://map.chuklee.com";
+	// 	String url = UriComponentsBuilder.fromUriString(baseUrl)
+	// 	.queryParam("lat", lat)
+	// 	.queryParam("lng", lng)
+	// 	.toUriString();
 
 
-		RestTemplate template = new RestTemplate();
-		RequestEntity<Void> req = RequestEntity.get(url).accept(MediaType.IMAGE_PNG).build();
-		try {
-            ResponseEntity<byte[]> res = template.exchange(req, byte[].class);
-            byte[] inputArr = res.getBody();
+	// 	RestTemplate template = new RestTemplate();
+	// 	RequestEntity<Void> req = RequestEntity.get(url).accept(MediaType.IMAGE_PNG).build();
+	// 	try {
+    //         ResponseEntity<byte[]> res = template.exchange(req, byte[].class);
+    //         byte[] inputArr = res.getBody();
+	// 		CustomMultipartFile customMultipartFile = new CustomMultipartFile(inputArr);
+    //     } catch (Exception e) {
+    //         System.err.print(e);
+    //     }
+	// }
 
-        } catch (Exception e) {
-            System.err.print(e);
-        }
-	}
 
-	
 }

@@ -7,6 +7,7 @@ import { RestaurantCuisineComponent } from './components/restaurant-cuisine.comp
 import { RestaurantDetailsComponent } from './components/restaurant-details.component';
 import { RestaurantService } from './restaurant-service';
 import { Router, RouterModule, Routes } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {path: "view2", component: RestaurantCuisineComponent},
@@ -25,7 +26,8 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    ReactiveFormsModule
   ],
   providers: [RestaurantService],
   bootstrap: [AppComponent]
