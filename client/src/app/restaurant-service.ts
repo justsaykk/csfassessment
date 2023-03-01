@@ -20,6 +20,14 @@ export class RestaurantService {
 		coordinates: []
 	})
 
+	private _restaurantView3 = new BehaviorSubject<RestaurantView3>({
+		id: "",
+		name: "",
+		cuisine: "",
+		address: "",
+		map: "",
+	})
+
 	constructor(private http: HttpClient) {}
 
 	// TODO Task 2
@@ -68,21 +76,58 @@ export class RestaurantService {
 	}
 	
 	// TODO Task 4
-	// Use this method to find a specific restaurant
-	// You can add any parameters (if any) 
 	// DO NOT CHNAGE THE METHOD'S NAME OR THE RETURN TYPE
 	public getRestaurant(restaurant: string): Promise<Restaurant> {
 		let queryUrl = `${this.BASE_URL}/${restaurant}`
-	
+		
+				/* 
+				*	server response:
+				* {
+					restaurant_id: string
+					name: string
+					cuisine: string
+					address: string
+					map: string
+					coordinates: string[]
+				* }
+				*/
 		return firstValueFrom<any>(
-			this.http.get<Restaurant>(
+			this.http.get<any>(
 				queryUrl
+			).pipe(
+				take(1),
+				map(r => {
+					// Manipulate coordinates
+					let coordinates: number[] = [];
+					r.coordinates.map((el:string) => {coordinates.push(Number.parseInt(el))})
+
+					let view3Data: RestaurantView3 = {
+						id: r.restaurant_id,
+						name: r.name,
+						cuisine: r.cuisine,
+						address: r.address,
+						map: r.map
+					} as RestaurantView3
+					this._restaurantView3.next(view3Data);
+
+					return {
+						restaurantId: r.restaurant_id,
+						name: r.name,
+						cuisine: r.cuisine,
+						address: r.address,
+						coordinates: coordinates
+					} as Restaurant
+				})
 			)
 		)
 	}
 
 	public setRestaurant(restaurant: Restaurant): void {
 		this._restaurant.next(restaurant);
+	}
+
+	public getRestaurantView3$(): Observable<RestaurantView3> {
+		return this._restaurantView3;
 	}
 
 	public getRestaurant$(): Observable<Restaurant> {

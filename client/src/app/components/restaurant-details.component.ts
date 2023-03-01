@@ -1,7 +1,8 @@
+import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { Restaurant } from '../models';
+import { Comment, Restaurant, RestaurantView3 } from '../models';
 import { RestaurantService } from '../restaurant-service';
 
 @Component({
@@ -32,15 +33,17 @@ export class RestaurantDetailsComponent implements OnInit, OnDestroy {
 	// TODO Task 4 and Task 5
 	// For View 3
 
-  restaurant!: Restaurant
-  restaurant$!: Subscription
+  restaurantView3!: RestaurantView3
+  restaurantView3$!: Subscription
   commentForm!: FormGroup
 
-  constructor(private svc: RestaurantService, private fb: FormBuilder) {}
+  constructor(private svc: RestaurantService, private fb: FormBuilder, private _location: Location) {}
 
   ngOnInit(): void {
-      this.restaurant$ = this.svc.getRestaurant$().subscribe(
-        (data) => {this.restaurant = data}
+      this.restaurantView3$ = this.svc.getRestaurantView3$().subscribe(
+        (data: RestaurantView3) => {
+          this.restaurantView3 = data
+        }
       )
 
       this.commentForm = this.fb.group({
@@ -51,12 +54,20 @@ export class RestaurantDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.restaurant$.unsubscribe();
+      this.restaurantView3$.unsubscribe();
   }
 
   onSubmit() {
-    let formData = this.commentForm.value
-    let id = this.restaurant.restaurantId
-    // this.svc.postComment()
+    this.svc.postComment({
+      name: this.commentForm.value.name,
+      rating: this.commentForm.value.rating,
+      restaurantId: this.restaurantView3?.id,
+      text: this.commentForm.value.text
+    } as Comment
+    )
+  }
+  
+  goBack() {
+    this._location.back();
   }
 }

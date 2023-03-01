@@ -27,6 +27,7 @@ export interface RestaurantList {
 }
 
 export interface RestaurantView3 {
+	id: string | null
 	name: string | null
 	cuisine: string | null
 	address: string | null

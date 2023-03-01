@@ -21,7 +21,6 @@ import jakarta.json.JsonObject;
 import vttp2022.csf.assessment.server.models.Comment;
 import vttp2022.csf.assessment.server.models.RestView2;
 import vttp2022.csf.assessment.server.models.Restaurant;
-import vttp2022.csf.assessment.server.services.CommentService;
 import vttp2022.csf.assessment.server.services.RestaurantService;
 
 @RestController
@@ -31,9 +30,6 @@ public class ApiController {
 
     @Autowired
     private RestaurantService rSvc;
-
-    @Autowired
-    private CommentService commentService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getCuisines() {
@@ -80,41 +76,32 @@ public class ApiController {
         // Get restaurant object
         Optional<Restaurant> restaurantOptional = rSvc.getRestaurant(restaurant_id);
         Restaurant restaurant = restaurantOptional.get();
+        String lat = Float.toString(restaurant.getCoordinates().getLatitude());
+		String lng = Float.toString(restaurant.getCoordinates().getLongitude());
 
-        // Get Coordinates
-        Float lat = restaurant.getCoordinates().getLatitude();
-        Float lng = restaurant.getCoordinates().getLongitude();
-
-        // Get map from Api
-        // Maybe Later
-
+        JsonArrayBuilder latlngArr = Json.createArrayBuilder()
+        .add(lat).add(lng);
 
         JsonObject restaurantObj = Json.createObjectBuilder()
+        .add("restaurant_id", restaurant.getRestaurantId())
         .add("name", restaurant.getName())
         .add("cuisine", restaurant.getCuisine())
         .add("address", restaurant.getAddress())
-        .add("mapUrl", restaurant.getMapURL())
+        .add("map", restaurant.getMapURL())
+        .add("coordinates", latlngArr)
         .build();
-
-        System.out.println(restaurantObj.toString());
-
-        return null;
+        
+        return new ResponseEntity<String>(restaurantObj.toString(), HttpStatus.OK);
     }
 
     @PostMapping(path = "/comments")
     public ResponseEntity<String> postComments(
         @RequestBody Comment comment
     ) {
-        if (commentService.saveComment(comment)) {
-            JsonObject response = Json.createObjectBuilder()
-            .add("message", "Comment posted")
-            .build();
-            return new ResponseEntity<String>(response.toString(), HttpStatus.OK);
-        } else {
-            JsonObject response = Json.createObjectBuilder()
-            .add("message", "Unsuccessful post")
-            .build();
-            return new ResponseEntity<String>(response.toString(), HttpStatus.BAD_REQUEST);
-        }
+        rSvc.addComment(comment);
+        JsonObject response = Json.createObjectBuilder()
+        .add("message", "Comment posted")
+        .build();
+        return new ResponseEntity<String>(response.toString(), HttpStatus.OK);
    }
 }

@@ -1,1 +1,53 @@
-<p>restaurant-details works!</p>
+<div>
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td>{{restaurantView3.name}}</td>
+        </tr>
+        <tr>
+            <td>Cuisine:</td>
+            <td>{{restaurantView3.cuisine}}</td>
+        </tr>
+        <tr>
+            <td>Address:</td>
+            <td>{{restaurantView3.address}}</td>
+        </tr>
+        <tr>
+            <td>
+                <img [src]="restaurantView3.address">
+            </td>
+        </tr>
+    </table>
+    <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+        <table>
+            <tr>
+                <td>Comment</td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td>
+                    <input type="text" formControlName="name">
+                </td>
+            </tr>
+            <tr>
+                <td>Rating</td>
+                <td>
+                    <input type="number" min="0" max="5" formControlName="rating">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <textarea cols="30" rows="10" formControlName="text"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button (click)="goBack()">Back</button>
+                </td>
+                <td>
+                    <button type="submit">Submit</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

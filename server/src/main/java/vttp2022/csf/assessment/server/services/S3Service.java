@@ -1,14 +1,14 @@
 package vttp2022.csf.assessment.server.services;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -21,36 +21,29 @@ public class S3Service {
     @Autowired
     private AmazonS3 s3Client;
 
-    public String upload(MultipartFile file) throws IOException {
+    private String bucketName = "csfassessmentkk";
+
+    public void upload(byte[] file, String id) throws IOException {
 
         // User data
         Map<String, String> userData = new HashMap<>();
         userData.put("name", "fred");
         userData.put("uploadTime", (new Date()).toString());
-        userData.put("originalFilename", file.getOriginalFilename());
+        userData.put("originalFilename", id);
 
         // Metadata of the file
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(file.getSize()); // long
-        metadata.setContentType(file.getContentType()); // string
         metadata.setUserMetadata(userData);
 
-        String key = UUID.randomUUID().toString().substring(0, 8);
-
+        
         // Create a put request
-        PutObjectRequest putReq = new PutObjectRequest(
-            "csfassessmentkk", // bucket name
-            "myobjects/%s".formatted(key), //key
-            file.getInputStream(), //inputstream
-            metadata);
-
-        // Allow public access
-        putReq.withCannedAcl(CannedAccessControlList.PublicRead);
+        InputStream is = new ByteArrayInputStream(file);
+        PutObjectRequest putReq = new PutObjectRequest(this.bucketName,
+            "myobjects/%s".formatted(id),
+            is,
+            metadata)
+            .withCannedAcl(CannedAccessControlList.PublicRead); // Allow public access
 
         s3Client.putObject(putReq);
-
-        return key;
-
     }
-    
 }

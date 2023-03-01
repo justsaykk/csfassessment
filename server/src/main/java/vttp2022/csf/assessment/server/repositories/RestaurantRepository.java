@@ -1,7 +1,6 @@
 package vttp2022.csf.assessment.server.repositories;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -106,7 +105,6 @@ public class RestaurantRepository {
 			restaurant.setAddress(r.getString("address"));
 			LatLng latlng = new LatLng();
 			List<Double> latlngArr = r.getList("coordinates", Double.class);
-
 			System.out.printf("Address: %s\n", restaurant.getAddress());
 			
 			latlng.setLatitude(latlngArr.get(0).floatValue());
@@ -124,8 +122,8 @@ public class RestaurantRepository {
 	//  
 	public void addComment(Comment comment) {
 		// Implmementation in here
-		
+		template.insert(comment, "comments");
 	}
-	
+		
 	// You may add other methods to this class
 }
